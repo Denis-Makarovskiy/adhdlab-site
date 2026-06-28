@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Google Analytics (GA4) — ADHD Lab property G-N03YS50LDR -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-N03YS50LDR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-N03YS50LDR');
+</script>
+<title>Crumple — a tiny task app for ADHD brains · ADHD Lab</title>
+<meta name="description" content="Crumple is a deliberately tiny task app for ADHD brains — no streaks, no guilt, just sticky notes you crumple when you're done. The first product from ADHD Lab, built by a clinical psychologist who has ADHD. Join the design-partner cohort." />
+<meta property="og:title" content="Crumple — finishing a task should feel like something" />
+<meta property="og:description" content="A tiny task app for ADHD brains. No streaks. No guilt. Just sticky notes you crumple when you're done. The first product from ADHD Lab. Join the cohort." />
+<meta property="og:type" content="website" />
+<style>
+  :root{
+    --paper:#FBF7EF; --paper-2:#F3ECDF; --ink:#211C16; --ink-soft:#5C5346;
+    --accent:#F0603F; --accent-ink:#fff; --line:#E4D9C7; --card:#FFFFFF;
+    --radius:18px; --maxw:1080px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 20% 8%,#fff 0,transparent 38%),radial-gradient(circle at 92% 78%,#fff 0,transparent 32%);
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  a{color:inherit}
+  .btn{
+    display:inline-block;background:var(--accent);color:var(--accent-ink);
+    text-decoration:none;font-weight:650;padding:14px 24px;border-radius:999px;
+    border:0;cursor:pointer;font-size:16px;transition:transform .12s ease,box-shadow .2s ease;
+    box-shadow:0 6px 18px rgba(240,96,63,.28);
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(240,96,63,.34)}
+  .btn.ghost{background:transparent;color:var(--ink);box-shadow:none;border:1.5px solid var(--line)}
+  .btn.wide{width:100%;text-align:center;font-size:17px;padding:16px}
+
+  nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:750;letter-spacing:-.01em}
+  .brand .dot{width:26px;height:26px;border-radius:8px;background:var(--accent);
+    display:inline-grid;place-items:center;color:#fff;font-size:15px;transform:rotate(-6deg)}
+  .brand small{font-weight:500;color:var(--ink-soft);font-size:13px;display:block;margin-top:-3px}
+
+  header{padding:36px 0 70px}
+  .eyebrow{display:inline-block;font-size:13px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--accent);background:#fff;border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+  h1{font-size:clamp(34px,6vw,62px);line-height:1.04;letter-spacing:-.025em;margin:22px 0 18px;max-width:14ch}
+  .lede{font-size:clamp(17px,2.4vw,21px);color:var(--ink-soft);max-width:46ch;margin-bottom:30px}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .cta-note{font-size:14px;color:var(--ink-soft)}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+  @media(max-width:820px){.hero-grid{grid-template-columns:1fr;gap:28px}}
+
+  .note-stack{position:relative;height:340px}
+  .note{position:absolute;width:188px;height:188px;border-radius:6px;padding:18px;
+    font-weight:600;font-size:16px;box-shadow:0 14px 30px rgba(33,28,22,.16);}
+  .note.n1{background:#FFE3A3;transform:rotate(-7deg);top:20px;left:10px}
+  .note.n2{background:#BFE3C8;transform:rotate(5deg);top:60px;left:150px}
+  .note.n3{background:#F9C7BD;transform:rotate(-3deg);top:165px;left:70px}
+  .note .done{display:inline-block;margin-top:10px;font-size:12px;font-weight:700;color:#1b7a3e;
+    background:rgba(27,122,62,.12);padding:3px 9px;border-radius:999px}
+  .crumpled{position:absolute;top:150px;left:220px;width:120px;height:120px;
+    background:radial-gradient(circle at 40% 35%,#fff,#E9DEC9);border-radius:46% 54% 50% 50%/52% 46% 54% 48%;
+    box-shadow:inset -8px -10px 16px rgba(0,0,0,.08),inset 8px 8px 14px rgba(255,255,255,.7),0 10px 22px rgba(33,28,22,.16);
+    transform:rotate(8deg)}
+  .crumpled::after{content:"✕ done";position:absolute;inset:0;display:grid;place-items:center;
+    font-size:12px;font-weight:800;color:#9a8b6f;transform:rotate(-8deg)}
+
+  section{padding:64px 0;border-top:1px solid var(--line)}
+  .kicker{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+  h2{font-size:clamp(26px,4vw,40px);letter-spacing:-.02em;line-height:1.1;max-width:18ch}
+  .sub{color:var(--ink-soft);font-size:18px;max-width:54ch;margin-top:14px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:38px}
+  @media(max-width:760px){.cards{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+  .card .ic{font-size:26px;margin-bottom:12px}
+  .card h3{font-size:19px;margin-bottom:8px;letter-spacing:-.01em}
+  .card p{color:var(--ink-soft);font-size:15.5px}
+
+  /* founder */
+  .founder{display:grid;grid-template-columns:300px 1fr;gap:44px;align-items:center}
+  @media(max-width:760px){.founder{grid-template-columns:1fr;gap:26px}}
+  .photo{width:100%;aspect-ratio:1/1;border-radius:22px;overflow:hidden;border:1px solid var(--line);
+    background:linear-gradient(135deg,#F3ECDF,#fff);box-shadow:0 14px 34px rgba(33,28,22,.12);
+    display:grid;place-items:center;color:#b6a98f;font-size:14px;font-weight:600;text-align:center;position:relative}
+  .photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .badge-row{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px}
+  .badge{font-size:13px;font-weight:650;background:#fff;border:1px solid var(--line);color:var(--ink);
+    padding:6px 12px;border-radius:999px}
+  .founder p.q{font-size:19px;line-height:1.5;color:var(--ink)}
+  .founder .sign{margin-top:16px;color:var(--ink-soft);font-size:15px}
+  .founder .sign b{color:var(--ink)}
+
+  /* lineup band */
+  .lineup{background:var(--paper-2);border-radius:22px;padding:30px 34px;margin-top:34px;
+    display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:space-between;border:1px solid var(--line)}
+  .lineup .t{font-size:17px}
+  .lineup .t b{color:var(--ink)}
+  .chips{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{font-size:13.5px;font-weight:650;padding:8px 14px;border-radius:999px;background:#fff;border:1px solid var(--line)}
+  .chip.live{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .chip.soon{color:var(--ink-soft)}
+
+  .cohort{background:var(--ink);color:#fff;border-radius:26px;padding:46px}
+  .cohort .kicker{color:#FFB4A6}
+  .cohort h2{color:#fff}
+  .cohort .sub{color:#cfc6b8}
+  .cohort-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:8px;align-items:start}
+  @media(max-width:820px){.cohort-grid{grid-template-columns:1fr;gap:28px}}
+  .cohort ul{list-style:none;margin:20px 0 0;display:grid;gap:12px}
+  .cohort li{display:flex;gap:12px;align-items:flex-start;color:#d9d0c2;font-size:16px}
+  .cohort li b{color:#fff;font-weight:650}
+  .check{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;
+    display:grid;place-items:center;font-size:12px;margin-top:2px}
+
+  /* form */
+  .formcard{background:#fff;border-radius:18px;padding:26px;color:var(--ink)}
+  .formcard h3{font-size:20px;margin-bottom:4px}
+  .formcard .fh{color:var(--ink-soft);font-size:14px;margin-bottom:18px}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13.5px;font-weight:650;margin-bottom:6px}
+  .field input,.field textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+    font:inherit;font-size:15px;background:var(--paper);color:var(--ink)}
+  .field textarea{min-height:84px;resize:vertical}
+  .field input:focus,.field textarea:focus{outline:2px solid var(--accent);border-color:transparent}
+  .checkrow{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-soft);margin:6px 0 16px}
+  .checkrow input{margin-top:3px;width:18px;height:18px;flex:0 0 auto}
+
+  /* social projects */
+  .social{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+  @media(max-width:760px){.social{grid-template-columns:1fr;gap:22px}}
+  .social .ic{font-size:34px}
+
+  .band{background:var(--accent);color:#fff;border-radius:26px;padding:50px 40px;text-align:center}
+  .band h2{color:#fff;margin:0 auto;max-width:20ch}
+  .band p{color:#ffe7e1;margin:14px auto 26px;max-width:46ch}
+  .band .btn{background:#fff;color:var(--ink)}
+  .band .email{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;color:#fff;
+    background:rgba(255,255,255,.16);padding:8px 14px;border-radius:999px;display:inline-block;margin-top:18px}
+
+  footer{padding:46px 0;color:var(--ink-soft);font-size:14px;border-top:1px solid var(--line)}
+  footer .fl{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  footer a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav>
+    <div class="brand">
+      <span class="dot">✕</span>
+      <span>ADHD&nbsp;Lab<small>makers of Crumple</small></span>
+    </div>
+    <a class="btn ghost" href="#join">Join the cohort</a>
+  </nav>
+
+  <header>
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">The first product from ADHD Lab</span>
+        <h1>Finishing a task should <em>feel</em> like something.</h1>
+        <p class="lede">Crumple is a deliberately tiny task app for ADHD brains. No streaks. No guilt. Just sticky notes you <b>crumple</b> the moment you're done — the little hit of dopamine our brains actually need.</p>
+        <div class="cta-row">
+          <a class="btn" href="#join">Join the early cohort</a>
+          <span class="cta-note">No spam. No streaks. Just honest feedback.</span>
+        </div>
+      </div>
+      <div class="note-stack" aria-hidden="true">
+        <div class="note n1">Reply to that email<span class="done">done ✓</span></div>
+        <div class="note n2">Take meds 💊</div>
+        <div class="note n3">Start the thing<span class="done">done ✓</span></div>
+        <div class="crumpled"></div>
+      </div>
+    </div>
+  </header>
+
+  <section id="why">
+    <div class="kicker">Why Crumple</div>
+    <h2>Most task apps punish you. This one rewards you.</h2>
+    <p class="sub">ADHD brains run on immediate reward. A quiet checkbox does nothing. Streaks just become one more thing to fail. Crumple makes "done" a moment you can feel.</p>
+    <div class="cards">
+      <div class="card"><div class="ic">🗒️→🪨</div><h3>Crumple = done</h3><p>Finish a task and physically crush the sticky note — a satisfying, tactile little win, every single time.</p></div>
+      <div class="card"><div class="ic">🚫🔥</div><h3>No streaks, no guilt</h3><p>Miss a day? Nothing breaks. There's no streak to protect and no shame engine. You just pick up where you are.</p></div>
+      <div class="card"><div class="ic">🤏</div><h3>Deliberately tiny</h3><p>Not another overwhelming productivity system. Sticky notes you crumple. That's the whole idea — on purpose.</p></div>
+    </div>
+  </section>
+
+  <section id="who">
+    <div class="kicker">Who's behind this</div>
+    <div class="founder">
+      <div class="photo" id="founder-photo">
+        <!-- swap this with: <img src="denis.jpg" alt="Denis" /> -->
+        photo coming
+      </div>
+      <div>
+        <h2>Hi, I'm Denis.</h2>
+        <div class="badge-row">
+          <span class="badge">Clinical psychologist</span>
+          <span class="badge">PhD</span>
+          <span class="badge">…and I have ADHD</span>
+        </div>
+        <p class="q">I'm a clinical psychologist with a PhD — and I live with ADHD myself. I kept reaching for task apps that were built for neurotypical brains and quietly made mine feel worse. So I started building the tools I actually wished existed.</p>
+        <div class="sign"><b>Crumple is the first.</b> It's the beginning of a small line of honest, ADHD-first products from ADHD&nbsp;Lab — designed with the science <i>and</i> the lived experience behind them.</div>
+        <div class="lineup">
+          <div class="t"><b>The ADHD&nbsp;Lab lineup</b> — one honest tool at a time.</div>
+          <div class="chips">
+            <span class="chip live">Crumple · now</span>
+            <span class="chip soon">more in progress</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="join">
+    <div class="cohort">
+      <div class="cohort-grid">
+        <div>
+          <div class="kicker">Built with ADHD people — not just for them</div>
+          <h2>Join the founding cohort.</h2>
+          <p class="sub">I'd rather shape Crumple <i>with</i> ADHD folks than guess. If that's you, come kick the tires early.</p>
+          <ul>
+            <li><span class="check">✓</span><div><b>Full access, free.</b> Founding-user access to Crumple before anyone else.</div></li>
+            <li><span class="check">✓</span><div><b>A direct line to the maker.</b> Tell me what's annoying. I actually change it.</div></li>
+            <li><span class="check">✓</span><div><b>Zero obligation.</b> No "post about us" deal. Just your honest read.</div></li>
+          </ul>
+        </div>
+        <div class="formcard">
+          <h3>Sign up for the cohort</h3>
+          <div class="fh">Takes 30 seconds. I read every one myself.</div>
+          <form action="submit.php" method="POST">
+            <div style="position:absolute;left:-9999px" aria-hidden="true"><label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label></div>
+            <div class="field"><label for="name">Your name</label><input id="name" name="name" required placeholder="First name is fine" /></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required placeholder="you@email.com" /></div>
+            <div class="field"><label for="social">Instagram / TikTok handle <span style="font-weight:400;color:var(--ink-soft)">(optional)</span></label><input id="social" name="social" placeholder="@yourhandle" /></div>
+            <div class="field"><label for="about">How do you wrangle tasks right now — and where does it fall apart?</label><textarea id="about" name="about" placeholder="A sentence or two about your ADHD brain"></textarea></div>
+            <label class="checkrow"><input type="checkbox" id="socialproj" name="socialproj" /><span>I run a social / nonprofit project (I'd like discounted access — see below)</span></label>
+            <button type="submit" class="btn wide">Count me in →</button>
+            <div class="fh" style="margin:12px 0 0;text-align:center">I read &amp; reply to every one myself. No spam, ever.</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="social-projects">
+    <div class="social">
+      <div>
+        <div class="ic">🌱</div>
+        <div class="kicker" style="margin-top:14px">For social projects &amp; nonprofits</div>
+        <h2>Doing good with ADHD work? Let's make it easier.</h2>
+      </div>
+      <div>
+        <p class="sub" style="margin-top:0">If you run a social initiative or nonprofit — especially one supporting neurodivergent or ADHD communities — you can get Crumple and our future products on <b>favorable, discounted terms</b>. Tools shouldn't be the thing standing in your way.</p>
+        <p style="margin-top:16px"><a class="btn" href="mailto:denis@adhdlab.online?subject=Social%20project%20—%20access%20request&body=Hi%20Denis%2C%20I%20run%20a%20social%2Fnonprofit%20project.%20Here's%20what%20we%20do%3A">Email us about access</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="band">
+      <h2>Want in, or just curious?</h2>
+      <p>Email me directly — I read every message myself.</p>
+      <a class="btn" href="mailto:denis@adhdlab.online?subject=Crumple%20cohort">Email Denis</a>
+      <div class="email">denis@adhdlab.online</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fl">
+      <div><b>ADHD&nbsp;Lab</b> — honest tools for ADHD brains.<br/>Built by a clinical psychologist who has ADHD. Crumple is product one.</div>
+      <div>© 2026 ADHD Lab · <a href="mailto:denis@adhdlab.online">denis@adhdlab.online</a></div>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>
